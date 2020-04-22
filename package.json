@@ -20,6 +20,9 @@
 		"img:min": "node config/imagemin.js",
 		"svg:min": "svgo -f src/img -o dist/img/svg --pretty -r --multipass",
 		"/": "===================================================================================",
+		"do:docs": "rimraf dist/docs/ && ncp src/docs/ dist/docs/",
+		"do:fonts": "rimraf dist/fonts/ && ncp src/fonts/ dist/fonts/",
+		"do:assets": "rimraf dist/assets/ && ncp src/assets/ dist/assets/",
 		"do:img-min": "run-s img:min svg:min",
 		"do:scss": "node-sass --output-style expanded --source-map dist/css -r -o dist/css src/scss",
 		"do:scss-comp": "node-sass --output-style compressed -r -o dist/css src/scss",
@@ -37,20 +40,16 @@
 		"watch:bableReact": "babel --watch src/js/**/*.js -o dist/js/app.js --presets @babel/preset-react",
 		"watch:img": "onchange src/img/**/* -e src/img/svg/**/* -- npm run img:min",
 		"watch:svg": "onchange src/img/svg/**/*.svg -- npm run svg:min",
-		"watch:docs": "onchange src/docs/**/* -- npm run build:docs",
-		"watch:fonts": "onchange src/fonts/**/* -- npm run build:fonts",
-		"watch:assets": "onchange src/assets/**/* -- npm run build:assets",
+		"watch:docs": "onchange src/docs/**/* -- npm run do:docs",
+		"watch:fonts": "onchange src/fonts/**/* -- npm run do:fonts",
+		"watch:assets": "onchange src/assets/**/* -- npm run do:assets",
 		"///": "===================================================================================",
 		"work:proxy": "run-p watch:scss watch:bablejs watch:img watch:svg watch:docs watch:fonts watch:assets bs:proxy",
 		"work:server": "run-p watch:scss watch:bablejs watch:img watch:svg watch:docs watch:fonts watch:assets bs:server",
 		"////": "===================================================================================",
-		"build:docs": "rimraf dist/docs/ && ncp src/docs/ dist/docs/",
-		"build:fonts": "rimraf dist/fonts/ && ncp src/fonts/ dist/fonts/",
-		"build:assets": "rimraf dist/assets/ && ncp src/assets/ dist/assets/",
 		"build:css": "rimraf dist/css/*.map && run-s do:scss-comp do:css-min",
 		"build:ES5js": "rimraf dist/js/*.map && npm run do:uglifyComp",
-		"build:img": "npm run do:img-min",
-		"build:full": "run-p build:assets build:docs build:fonts build:css build:ES5js do:imgmin"
+		"build:full": "run-p do:assets do:docs do:fonts do:img-min build:css build:ES5js"
 	},
 	"author": "Ilya Fedotov",
 	"license": "MIT",
@@ -79,9 +78,6 @@
 	},
 	"dependencies": {},
 	"browserslist": [
-		"last 1 version",
-		"> 1%",
-		"maintained node versions",
-		"not dead"
+		"defaults"
 	]
 }
